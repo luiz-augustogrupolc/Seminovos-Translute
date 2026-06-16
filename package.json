@@ -1,7 +1,7 @@
 {
   "name": "translute-seminovos",
   "version": "1.0.0",
-  "description": "Sistema de gestão de vendas e frota - Translute Seminovos",
+  "description": "Sistema de gestao de vendas e frota - Translute Seminovos",
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
