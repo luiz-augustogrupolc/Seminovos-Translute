@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Translute Seminovos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--navy:#0d1b2e;--navy2:#162336;--blue:#1a56db;--blue2:#2563eb;--blight:#dbeafe;--btxt:#1e40af;--gold:#c9933a;--gold2:#f5c842;--wh:#fff;--g50:#f1f5f9;--g100:#e2e8f0;--g300:#94a3b8;--g500:#64748b;--g700:#334155;--g900:#0f172a;--green:#059669;--gbg:#d1fae5;--gtxt:#065f46;--red:#dc2626;--rbg:#fee2e2;--rtxt:#991b1b;--yel:#d97706;--ybg:#fef3c7;--ytxt:#78350f;--pur:#7c3aed;--pubg:#ede9fe;--putxt:#4c1d95;--org:#ea580c;--obg:#fff7ed;--otxt:#7c2d12;--rsm:6px;--rlg:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--wh);color:var(--g900);font-size:13.5px;line-height:1.5;min-height:100vh}
+/* LOGIN */
+#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy)}
+.login-box{background:var(--wh);border-radius:var(--rlg);width:380px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-ico{width:56px;height:56px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.login-logo-ico svg{width:26px;height:26px;fill:none;stroke:var(--navy);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.login-title{font-size:22px;font-weight:700;color:var(--navy)}
+.login-sub{font-size:12.5px;color:var(--g300);margin-top:3px}
+.lf{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.ll{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--g500)}
+.li{border:1px solid var(--g100);border-radius:var(--rsm);padding:10px 14px;font-size:13.5px;font-family:inherit;color:var(--g900);outline:none;background:var(--wh);width:100%;transition:border-color .15s}
+.li:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
+.btn-login{background:var(--navy);color:#fff;border:none;border-radius:var(--rsm);padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;margin-top:8px;transition:background .15s}
+.btn-login:hover{background:var(--navy2)}
+.login-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:10px;display:none}
+/* NAV */
+#app{display:none}
+.nav{background:var(--navy);height:56px;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.logo{display:flex;align-items:center;gap:10px;margin-right:20px;flex-shrink:0}
+.logo-mk{width:32px;height:32px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mk svg{width:16px;height:16px;fill:none;stroke:var(--navy);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.logo-n{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.3px;line-height:1}
+.logo-t{font-size:9.5px;color:var(--gold);letter-spacing:.8px;text-transform:uppercase;font-weight:400;line-height:1;margin-top:2px}
+.ntabs{display:flex;gap:2px;flex:1;overflow-x:auto}
+.ntab{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:var(--rsm);cursor:pointer;font-size:12.5px;color:rgba(255,255,255,.55);border:none;background:none;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.ntab:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
+.ntab.on{background:rgba(26,86,219,.35);color:#93c5fd;font-weight:500;border-bottom:2px solid var(--blue2)}
+.ntab svg{width:13px;height:13px}
+.badge{display:inline-flex;align-items:center;padding:2px 6px;border-radius:20px;font-size:9.5px;font-weight:600;margin-left:3px}
+.bg{background:var(--gbg);color:var(--gtxt)}.by{background:var(--ybg);color:var(--ytxt)}.br{background:var(--rbg);color:var(--rtxt)}.bb{background:var(--blight);color:var(--btxt)}.bp{background:var(--pubg);color:var(--putxt)}.bgray{background:var(--g100);color:var(--g500);border:1px solid var(--g100)}
+.nav-r{margin-left:auto;flex-shrink:0;padding-left:10px;display:flex;align-items:center;gap:8px}
+.nav-user{font-size:11px;color:rgba(255,255,255,.4)}
+.btn-p{display:flex;align-items:center;gap:6px;background:var(--gold);color:var(--navy);border:none;border-radius:var(--rsm);padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-p:hover{background:var(--gold2)}
+.btn-ghost{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);border-radius:var(--rsm);padding:6px 10px;font-size:11px;cursor:pointer;font-family:inherit}
+/* PAGES */
+.page{display:none;padding:20px 22px 40px}.page.on{display:block}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:18px}
+/* KPI */
+.kpi{background:var(--wh);border:1px solid var(--g100);border-radius:var(--rlg);padding:16px 18px;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.kpi-s{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.kpi-l{font-size:11px;color:var(--g500);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.kpi-v{font-size:23px;font-weight:600;line-height:1;color:var(--g900);letter-spacing:-.5px}
+.kpi-sub{font-size:11px;color:var(--g300);margin-top:5px}
+.card{background:var(--wh);border:1px solid var(--g100);border-radius:var(--rlg);padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:18px}
+.ct{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);margin-bottom:12px}
+/* TABLE */
+.tw{background:var(--wh);border:1px solid var(--g100);border-radius:var(--rlg);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:18px}
+.thd{padding:12px 16px;border-bottom:1px solid var(--g100);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tt{font-size:12px;font-weight:600;color:var(--g900)}.ti{font-size:11px;color:var(--g300);margin-left:auto}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--navy)}
+th{padding:9px 13px;text-align:left;font-size:9.5px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.06);font-family:'DM Mono',monospace}
+td{padding:9px 13px;border-bottom:1px solid var(--g50);font-size:12px;vertical-align:middle;white-space:nowrap;color:var(--g700)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafcff}
+.mono{font-family:'DM Mono',monospace;font-size:11.5px;font-weight:500;color:var(--blue2)}
+select,input[type=text],input[type=number],input[type=date],input[type=password]{background:var(--wh);border:1px solid var(--g100);border-radius:var(--rsm);color:var(--g900);font-size:12px;padding:6px 10px;outline:none;font-family:inherit;transition:border-color .15s}
+select:focus,input:focus{border-color:var(--blue2)}
+input::placeholder{color:var(--g300)}
+.banner{display:flex;align-items:center;gap:10px;background:var(--ybg);border:1px solid #fde68a;border-radius:var(--rlg);padding:11px 16px;font-size:12.5px;color:var(--ytxt);margin-bottom:18px}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;animation:pu 1.6s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
+.dr{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--g50)}.dr:last-child{border-bottom:none}
+.bh{height:5px;background:var(--g100);border-radius:4px;overflow:hidden;margin-top:4px}.bhf{height:100%;border-radius:4px}
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(2px)}.mbg.open{display:flex}
+.mdl{background:var(--wh);border-radius:var(--rlg);width:560px;max-width:96vw;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);border:1px solid var(--g100)}
+.mdl-hdr{background:var(--navy);padding:18px 22px;display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;z-index:10}
+.mdl-ttl{font-size:15px;font-weight:600;color:#fff}.mdl-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.mdl-x{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);width:28px;height:28px;border-radius:var(--rsm);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;font-family:inherit;flex-shrink:0}
+.mdl-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ff{display:flex;flex-direction:column;gap:5px}.ff.full{grid-column:1/-1}
+.fl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--g500)}
+.fi{border:1px solid var(--g100);border-radius:var(--rsm);padding:9px 12px;font-size:13px;font-family:inherit;color:var(--g900);outline:none;transition:border-color .15s;background:var(--wh);width:100%}
+.fi:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(26,86,219,.08)}.fi::placeholder{color:var(--g300)}
+.prev{background:var(--g50);border:1px solid var(--g100);border-radius:var(--rsm);padding:10px 12px;font-size:12px;color:var(--g500);min-height:44px;display:flex;align-items:center}
+.prev-ok{background:var(--gbg);border-color:#6ee7b7;color:var(--gtxt)}.prev-err{background:var(--rbg);border-color:#fca5a5;color:var(--rtxt)}.prev-warn{background:var(--ybg);border-color:#fde68a;color:var(--ytxt)}
+.mfoot{padding:0 22px 20px;display:flex;gap:10px;justify-content:flex-end}
+.btn-c{background:var(--wh);color:var(--g500);border:1px solid var(--g100);border-radius:var(--rsm);padding:9px 16px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-s{background:var(--navy);color:#fff;border:none;border-radius:var(--rsm);padding:9px 20px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}.btn-s:hover{background:var(--navy2)}.btn-s:disabled{background:var(--g300);cursor:not-allowed}
+/* TAGS */
+.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.tg{background:var(--gbg);color:var(--gtxt)}.tp{background:#d1fae5;color:#065f46}.tfr{background:var(--blight);color:var(--btxt)}.tab{background:var(--ybg);color:var(--ytxt)}.tcan{background:var(--rbg);color:var(--rtxt)}.tdoc{background:var(--pubg);color:var(--putxt)}.tof{background:var(--obg);color:var(--otxt)}.tdf{background:var(--g100);color:var(--g500)}
+.btn-ic{background:none;border:1px solid var(--g100);border-radius:4px;cursor:pointer;padding:3px 7px;font-size:11px;color:var(--g500);font-family:inherit;transition:all .15s}.btn-ic:hover{background:var(--blight);color:var(--btxt);border-color:#93c5fd}
+.ssel{border:1px solid var(--blue2);border-radius:4px;padding:2px 6px;font-size:11px;font-family:inherit;background:var(--wh);color:var(--g900);cursor:pointer}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;padding:11px 18px;border-radius:var(--rlg);font-size:12.5px;font-weight:500;z-index:9999;display:flex;align-items:center;gap:8px;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.15)}.toast.show{transform:translateY(0);opacity:1}
+.ti-c{width:20px;height:20px;border-radius:5px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.tipo-tab{display:flex;gap:4px;margin-bottom:14px}
+.tipo-btn{padding:6px 14px;border-radius:var(--rsm);border:1px solid var(--g100);background:var(--wh);color:var(--g500);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}.tipo-btn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.loading{text-align:center;padding:40px;color:var(--g300);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-ico"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+      <div class="login-title">Translute Seminovos</div>
+      <div class="login-sub">Sistema de gestão de vendas e frota</div>
+    </div>
+    <div class="lf"><div class="ll">Usuário</div><input class="li" id="l-user" placeholder="seu.usuario" autocomplete="username"></div>
+    <div class="lf"><div class="ll">Senha</div><input class="li" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn-login" onclick="doLogin()">Entrar</button>
+    <div class="login-err" id="l-err">Usuário ou senha incorretos</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<nav class="nav">
+  <div class="logo">
+    <div class="logo-mk"><svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+    <div><div class="logo-n">Translute</div><div class="logo-t">Seminovos</div></div>
+  </div>
+  <div class="ntabs">
+    <button class="ntab on" onclick="go('dash',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</button>
+    <button class="ntab" onclick="go('vendas',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>Vendas<span class="badge bg" id="bv">—</span></button>
+    <button class="ntab" onclick="go('ativos',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2 2h10zM13 8h4l4 4v4h-8V8z"/></svg>Frota &amp; Ativos<span class="badge by" id="bfr">604</span></button>
+    <button class="ntab" onclick="go('obj',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Objetivos<span class="badge by" id="bo">—</span></button>
+    <button class="ntab" onclick="go('fipe',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>Editor FIPE</button>
+    <button class="ntab" onclick="go('alert',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Alertas<span class="badge br" id="bal">—</span></button>
+    <button class="ntab admin-only" onclick="go('admin',this)" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>Usuários</button>
+  </div>
+  <div class="nav-r">
+    <span class="nav-user" id="nav-user"></span>
+    <button class="btn-ghost" onclick="doLogout()">Sair</button>
+    <button class="btn-p" onclick="openM('nova')">+ Nova Venda</button>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="p-dash" class="page on">
+  <div class="banner"><div class="dot"></div><span id="atxt">Carregando...</span></div>
+  <div class="g4" id="fin"></div>
+  <div class="g2">
+    <div><div class="card" id="fipe-card" style="margin-bottom:18px"></div></div>
+    <div><div class="g3" id="omini"></div><div class="card" style="margin-bottom:0"><div class="ct">Segmentos vendidos</div><div style="position:relative;height:108px"><canvas id="cSeg"></canvas></div></div></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0"><div class="ct">Faturamento por segmento</div><div style="position:relative;height:170px"><canvas id="cGrp"></canvas></div></div>
+    <div class="card" style="margin-bottom:0"><div class="ct">Evolução mensal</div><div style="position:relative;height:170px"><canvas id="cMes"></canvas></div></div>
+  </div>
+</div>
+
+<!-- VENDAS -->
+<div id="p-vendas" class="page">
+  <div class="tw">
+    <div class="thd">
+      <span class="tt">Registro de vendas</span>
+      <select id="vg" onchange="rv()"><option value="">Todos segmentos</option></select>
+      <select id="vf" onchange="rv()"><option value="">Toda class. FIPE</option><option>Abaixo FIPE</option><option>Na FIPE</option><option>Sem FIPE</option></select>
+      <select id="vst" onchange="rv()"><option value="">Todos status</option><option>ENTREGUE / PAGO OK</option><option>ENTREGUE</option><option>ENTREGUE EM FEIRA</option><option>DOCUMENTACAO</option><option>PAGA</option><option>NA OFICINA</option><option>EM BARUERI</option><option>EM RECIFE</option><option>EM SBC</option><option>CANCELADO</option></select>
+      <input type="text" id="vs" placeholder="Placa, cliente ou modelo..." oninput="rv()" style="width:190px">
+      <span class="ti" id="vc"></span>
+      <button class="btn-p" onclick="exportCSV()" style="font-size:11.5px;padding:6px 12px">⬇ CSV</button>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Placa</th><th>Modelo</th><th>Segmento</th><th>Ano</th><th>Cliente</th><th>Valor</th><th>FIPE</th><th>%FIPE</th><th>Class.</th><th>Comissão</th><th>Entrega</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody id="vb"><tr><td colspan="14" class="loading">Carregando vendas...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ATIVOS -->
+<div id="p-ativos" class="page">
+  <div class="g4" id="at-kpis"></div>
+  <div class="tipo-tab">
+    <button class="tipo-btn on" onclick="setTipo('TODOS',this)">Todos (604)</button>
+    <button class="tipo-btn" onclick="setTipo('CAVALO',this)">Cavalos (168)</button>
+    <button class="tipo-btn" onclick="setTipo('CARRETA',this)">Carretas (436)</button>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0"><div class="ct" id="at-chart-title">FIPE por marca/tipo</div><div style="position:relative;height:185px"><canvas id="cAtM"></canvas></div></div>
+    <div class="card" style="margin-bottom:0"><div class="ct">Distribuição por faixa de ano</div><div style="position:relative;height:185px"><canvas id="cAtA"></canvas></div></div>
+  </div>
+  <div style="height:18px"></div>
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card" style="margin-bottom:0"><div class="ct">Capital para desinvestimento</div><div id="at-rv"></div></div>
+    <div class="card" style="margin-bottom:0"><div class="ct">FIPE total por marca</div><div id="at-rm"></div></div>
+  </div>
+  <div class="tw">
+    <div class="thd">
+      <span class="tt">Inventário completo</span>
+      <select id="at-tp" onchange="rAt()"><option value="">Cavalos + Carretas</option><option value="CAVALO">Só Cavalos</option><option value="CARRETA">Só Carretas</option></select>
+      <select id="at-f" onchange="rAt()"><option value="">Todos status</option><option value="venda">Para vender</option><option value="manter">Manter</option></select>
+      <select id="at-m" onchange="rAt()"><option value="">Todas marcas</option></select>
+      <input type="text" id="at-s" placeholder="Buscar placa..." oninput="rAt()" style="width:150px">
+      <span class="ti" id="at-c"></span>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Placa</th><th>Tipo</th><th>Marca</th><th>Config.</th><th>Ano</th><th>Operação</th><th>FIPE est.</th><th>Status</th></tr></thead>
+      <tbody id="at-b"><tr><td colspan="9" class="loading">Carregando ativos...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- OBJETIVOS -->
+<div id="p-obj" class="page">
+  <div class="g4" id="okpi"></div>
+  <div class="tw">
+    <div class="thd">
+      <span class="tt">Frota monitorada — objetivos de venda</span>
+      <select id="ot" onchange="ro()"><option value="">Toda tração</option></select>
+      <select id="os" onchange="ro()"><option value="">Todos</option><option value="pend">Pendente</option><option value="VENDIDO">Vendido</option><option value="HIBRIDO">Híbrido</option></select>
+      <input type="text" id="oq" placeholder="Buscar placa..." oninput="ro()" style="width:150px">
+      <span class="ti" id="oc"></span>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Placa</th><th>Modelo</th><th>Tração</th><th>Ano</th><th>Valor aprox.</th><th>Status</th><th>Alterar</th></tr></thead>
+      <tbody id="ob"><tr><td colspan="8" class="loading">Carregando objetivos...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- EDITOR FIPE -->
+<div id="p-fipe" class="page">
+  <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:5px">Editor de FIPE por placa</div>
+  <div style="font-size:12.5px;color:var(--g500);margin-bottom:18px">Atualize o valor FIPE de qualquer venda cadastrada</div>
+  <div class="card">
+    <div class="ct">Atualizar FIPE</div>
+    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;background:var(--g50);border-radius:var(--rsm);padding:14px;border:1px solid var(--g100)">
+      <div class="ff"><div class="fl">Placa</div><input type="text" id="fp" placeholder="Ex: QRK8I93" style="width:130px;text-transform:uppercase;font-family:'DM Mono',monospace" oninput="bF()"></div>
+      <div class="ff" style="flex:1;min-width:220px"><div class="fl">Venda encontrada</div><div id="ff-found" style="font-size:12.5px;color:var(--g500);padding:7px 0">—</div></div>
+      <div class="ff"><div class="fl">Novo valor FIPE (R$)</div><input type="number" id="fn" placeholder="Ex: 534267" style="width:145px"></div>
+      <div class="ff"><button class="btn-s" onclick="saveFipe()" style="height:36px;padding:0 18px">Salvar FIPE</button></div>
+    </div>
+  </div>
+  <div class="tw">
+    <div class="thd">
+      <span class="tt">Vendas com FIPE cadastrada</span>
+      <input type="text" id="fs" placeholder="Buscar placa ou modelo..." oninput="rFT()" style="width:200px">
+      <span class="ti" id="fc"></span>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Placa</th><th>Modelo</th><th>Segmento</th><th>Valor venda</th><th>FIPE atual</th><th>% FIPE</th><th>Ação</th></tr></thead>
+      <tbody id="ft"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ALERTAS -->
+<div id="p-alert" class="page">
+  <div class="g3" style="margin-bottom:18px" id="ac"></div>
+  <div class="g2">
+    <div class="card" style="margin-bottom:0"><div class="ct">Abaixo de 85% da FIPE</div><div id="af"></div></div>
+    <div class="card" style="margin-bottom:0"><div class="ct">Negociações em aberto</div><div id="aa"></div></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="p-admin" class="page">
+  <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:18px">Gerenciar usuários</div>
+  <div class="tw">
+    <div class="thd">
+      <span class="tt">Usuários do sistema</span>
+      <button class="btn-p" onclick="openM('user')" style="font-size:11.5px;padding:6px 12px">+ Novo usuário</button>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Usuário</th><th>Nome</th><th>Perfil</th><th>Criado em</th><th>Ações</th></tr></thead>
+      <tbody id="users-b"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- MODAL NOVA VENDA -->
+<div class="mbg" id="modal-nova" onclick="if(event.target===this)closeM('nova')">
+  <div class="mdl">
+    <div class="mdl-hdr">
+      <div><div class="mdl-ttl">Registrar nova venda</div><div class="mdl-sub">Marca automaticamente como VENDIDO nos objetivos</div></div>
+      <button class="mdl-x" onclick="closeM('nova')">&#x2715;</button>
+    </div>
+    <div class="mdl-body">
+      <div class="fr">
+        <div class="ff"><div class="fl">Placa *</div><input class="fi" id="np" placeholder="Ex: QRK8I93" oninput="vp()" style="text-transform:uppercase;font-family:'DM Mono',monospace"></div>
+        <div class="ff"><div class="fl">Verificação</div><div class="prev" id="npv">Digite a placa...</div></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Modelo *</div><input class="fi" id="nm" placeholder="Ex: VOLVO FH 540 A6X4"></div>
+        <div class="ff"><div class="fl">Segmento</div><select class="fi" id="ng"><option>CAVALO 6X4</option><option>CAVALO 6X2</option><option>CAVALO 4X2</option><option>Carreta</option><option>CARRETA 3 EIXOS</option><option>CARRETA RODOTREM</option><option>TRUCK</option><option>TOCO</option></select></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Valor de venda (R$) *</div><input class="fi" id="nval" type="number" placeholder="Ex: 520000" oninput="ur()"></div>
+        <div class="ff"><div class="fl">FIPE de referência (R$)</div><input class="fi" id="nfi" type="number" placeholder="Opcional" oninput="ur()"></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Cliente *</div><input class="fi" id="nc" placeholder="Nome completo"></div>
+        <div class="ff"><div class="fl">Data de entrega</div><input class="fi" id="nd" type="date"></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Comissão (R$)</div><input class="fi" id="nco" type="number" placeholder="Opcional"></div>
+        <div class="ff"><div class="fl">Status</div><select class="fi" id="nst"><option>ENTREGUE / PAGO OK</option><option>ENTREGUE</option><option>ENTREGUE EM FEIRA</option><option>DOCUMENTACAO</option><option>EM BARUERI</option><option>EM RECIFE</option><option>EM SBC</option><option>PAGA</option><option>NA OFICINA</option><option>CANCELADO</option></select></div>
+      </div>
+      <div id="nr" style="display:none;background:var(--gbg);border:1px solid #6ee7b7;border-radius:var(--rsm);padding:11px 14px;font-size:12.5px;color:var(--gtxt)"></div>
+    </div>
+    <div class="mfoot"><button class="btn-c" onclick="closeM('nova')">Cancelar</button><button class="btn-s" id="bsv" onclick="regVenda()" disabled>Registrar venda</button></div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR VENDA -->
+<div class="mbg" id="modal-edit" onclick="if(event.target===this)closeM('edit')">
+  <div class="mdl" style="width:480px">
+    <div class="mdl-hdr">
+      <div><div class="mdl-ttl">Editar registro</div><div class="mdl-sub" id="edit-sub">—</div></div>
+      <button class="mdl-x" onclick="closeM('edit')">&#x2715;</button>
+    </div>
+    <div class="mdl-body">
+      <div class="fr">
+        <div class="ff full"><div class="fl">Cliente</div><input class="fi" id="ecli" placeholder="Nome do comprador"></div>
+      </div>
+      <div class="fr">
+        <div class="ff full"><div class="fl">Modelo</div><input class="fi" id="emod" placeholder="Ex: VOLVO FH 540 A6X4"></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Status</div><select class="fi" id="es"><option>ENTREGUE / PAGO OK</option><option>ENTREGUE</option><option>ENTREGUE EM FEIRA</option><option>DOCUMENTACAO</option><option>EM BARUERI</option><option>EM RECIFE</option><option>EM SBC</option><option>PAGA</option><option>NA OFICINA</option><option>CANCELADO</option></select></div>
+        <div class="ff"><div class="fl">Data de entrega</div><input class="fi" id="ed" type="date"></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Valor de venda (R$)</div><input class="fi" id="ev" type="number"></div>
+        <div class="ff"><div class="fl">FIPE (R$)</div><input class="fi" id="ef" type="number"></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Comissão (R$)</div><input class="fi" id="ec" type="number"></div>
+        <div class="ff"><div class="fl">Segmento</div><select class="fi" id="egrp"><option>CAVALO 6X4</option><option>CAVALO 6X2</option><option>CAVALO 4X2</option><option>Carreta</option><option>CARRETA 3 EIXOS</option><option>CARRETA RODOTREM</option><option>TRUCK</option><option>TOCO</option></select></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-c" onclick="closeM('edit')">Cancelar</button><button class="btn-s" onclick="saveEdit()">Salvar alterações</button></div>
+  </div>
+</div>
+
+<!-- MODAL NOVO USUÁRIO -->
+<div class="mbg" id="modal-user" onclick="if(event.target===this)closeM('user')">
+  <div class="mdl" style="width:420px">
+    <div class="mdl-hdr">
+      <div><div class="mdl-ttl">Novo usuário</div><div class="mdl-sub">Crie acesso para um novo membro da equipe</div></div>
+      <button class="mdl-x" onclick="closeM('user')">&#x2715;</button>
+    </div>
+    <div class="mdl-body">
+      <div class="fr">
+        <div class="ff"><div class="fl">Usuário *</div><input class="fi" id="u-user" placeholder="Ex: joao.silva"></div>
+        <div class="ff"><div class="fl">Senha *</div><input class="fi" id="u-pass" type="password" placeholder="Mínimo 6 caracteres"></div>
+      </div>
+      <div class="fr">
+        <div class="ff"><div class="fl">Nome completo *</div><input class="fi" id="u-nome" placeholder="Ex: João Silva"></div>
+        <div class="ff"><div class="fl">Perfil</div><select class="fi" id="u-perfil"><option value="operador">Operador</option><option value="admin">Admin</option></select></div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn-c" onclick="closeM('user')">Cancelar</button><button class="btn-s" onclick="createUser()">Criar usuário</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><div class="ti-c">&#x2713;</div><span id="tm"></span></div>
+</div><!-- /app -->
+
+<script>
+// ── API ──────────────────────────────────────────────────────────────────────
+const API = '';
+let TOKEN = localStorage.getItem('translute_token');
+let USER = JSON.parse(localStorage.getItem('translute_user') || 'null');
+
+async function api(method, path, body) {
+  const res = await fetch(API + path, {
+    method,
+    headers: { 'Content-Type': 'application/json', ...(TOKEN ? { Authorization: 'Bearer ' + TOKEN } : {}) },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (res.status === 401) { doLogout(); return; }
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Erro na requisição');
+  return data;
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const usuario = document.getElementById('l-user').value.trim();
+  const senha = document.getElementById('l-pass').value;
+  const err = document.getElementById('l-err');
+  err.style.display = 'none';
+  try {
+    const data = await api('POST', '/api/login', { usuario, senha });
+    TOKEN = data.token;
+    USER = { usuario: data.usuario, perfil: data.perfil, nome: data.nome };
+    localStorage.setItem('translute_token', TOKEN);
+    localStorage.setItem('translute_user', JSON.stringify(USER));
+    initApp();
+  } catch {
+    err.style.display = 'block';
+  }
+}
+
+function doLogout() {
+  TOKEN = null; USER = null;
+  localStorage.removeItem('translute_token');
+  localStorage.removeItem('translute_user');
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let V = [], O = [], A = [], DASH = {};
+let curIdx = -1, _atTipo = 'TODOS';
+let CH = {};
+
+function kc(id) { if (CH[id]) { CH[id].destroy(); delete CH[id]; } }
+function fmt(n) { return 'R$ ' + Math.round(n || 0).toLocaleString('pt-BR'); }
+function fmtM(n) { return 'R$ ' + ((n || 0) / 1e6).toFixed(2).replace('.', ',') + ' M'; }
+function pp(n) { return n != null && n > 20 ? n.toFixed(1) + '%' : '—'; }
+function dtf(s) { return s ? new Date(s + 'T12:00').toLocaleDateString('pt-BR') : '—'; }
+function pctC(p) { return p && p > 20 ? (p < 85 ? 'var(--red)' : p < 95 ? 'var(--yel)' : 'var(--green)') : 'var(--g300)'; }
+
+function toast(m, t = 'ok') {
+  const el = document.getElementById('toast'), ico = document.querySelector('.ti-c');
+  document.getElementById('tm').textContent = m;
+  ico.style.background = t === 'ok' ? 'var(--green)' : t === 'w' ? 'var(--yel)' : 'var(--red)';
+  el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+function stTag(st) {
+  const s = (st || '').trim().toUpperCase();
+  if (!s) return '<span class="tag tdf">—</span>';
+  if (s.includes('CANCELADO')) return `<span class="tag tcan">${st}</span>`;
+  if (s.includes('DOCUMENTA')) return `<span class="tag tdoc">${st}</span>`;
+  if (s.includes('PAGO')) return `<span class="tag tp">${st}</span>`;
+  if (s.includes('PAGA')) return `<span class="tag tp">${st}</span>`;
+  if (s.includes('FEIRA')) return `<span class="tag tfr">${st.substring(0, 22)}</span>`;
+  if (s.includes('ENTREGUE')) return `<span class="tag tg">${st.substring(0, 20)}</span>`;
+  if (s.includes('OFICINA')) return `<span class="tag tof">${st}</span>`;
+  return `<span class="tag tab">${st.substring(0, 18)}</span>`;
+}
+
+function go(pg, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
+  document.getElementById('p-' + pg).classList.add('on'); el.classList.add('on');
+  if (pg === 'fipe') rFT();
+  if (pg === 'admin') loadUsers();
+}
+
+function openM(id) { document.getElementById('modal-' + id).classList.add('open'); }
+function closeM(id) { document.getElementById('modal-' + id).classList.remove('open'); }
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function initApp() {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('nav-user').textContent = USER?.nome || USER?.usuario || '';
+  if (USER?.perfil === 'admin') {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+  }
+  await loadAll();
+}
+
+async function loadAll() {
+  try {
+    [V, O, A, DASH] = await Promise.all([
+      api('GET', '/api/vendas'),
+      api('GET', '/api/objetivos'),
+      api('GET', '/api/ativos'),
+      api('GET', '/api/dashboard'),
+    ]);
+    renderAll();
+  } catch (e) { toast('Erro ao carregar dados: ' + e.message, 'e'); }
+}
+
+function renderAll() {
+  initVF(); initAtF(); initOF();
+  rd(); rv(); rAt(); rAtCharts(); ro(); ra();
+  document.getElementById('bv').textContent = V.length;
+  document.getElementById('bo').textContent = O.filter(o => o.STATUS !== 'VENDIDO').length + ' pend.';
+  const af = V.filter(v => v.PCT && v.PCT > 20 && v.PCT < 85 && v.ST !== 'CANCELADO');
+  const ab = V.filter(v => !v.ENT && v.ST && v.ST.trim() !== '' && v.ST !== 'CANCELADO');
+  document.getElementById('bal').textContent = af.length + ab.length;
+}
+
+// ── NOVA VENDA ────────────────────────────────────────────────────────────────
+async function vp() {
+  const p = document.getElementById('np').value.trim().toUpperCase();
+  document.getElementById('np').value = p;
+  const pv = document.getElementById('npv');
+  if (p.length < 4) { pv.className = 'prev'; pv.textContent = 'Digite a placa...'; document.getElementById('bsv').disabled = true; return; }
+  const jaV = V.find(v => v.PLACA === p && v.ENT && v.ST !== 'CANCELADO');
+  const emO = O.find(o => o.PLACA === p);
+  const emA = A.find(a => a.PLACA === p);
+  if (jaV) { pv.className = 'prev prev-err'; pv.textContent = 'Já vendida para ' + jaV.CLI.substring(0, 30); document.getElementById('bsv').disabled = true; return; }
+  if (emO) { pv.className = 'prev prev-ok'; pv.textContent = 'Objetivo: ' + emO.MODELO + ' ' + emO.TRACAO + ' ' + emO.ANO + ' · ' + fmt(emO.VALOR_APROX); if (!document.getElementById('nm').value) document.getElementById('nm').value = emO.MODELO + ' ' + emO.TRACAO; }
+  else if (emA) { pv.className = 'prev prev-ok'; pv.textContent = 'Na frota: ' + emA.MARCA + ' ' + emA.CONFIG + ' ' + emA.ANO + ' · FIPE: ' + fmt(emA.FIPE); if (!document.getElementById('nm').value) document.getElementById('nm').value = emA.MARCA + ' ' + emA.CONFIG; }
+  else { pv.className = 'prev prev-warn'; pv.textContent = 'Placa não encontrada na frota — pode registrar mesmo assim'; }
+  document.getElementById('bsv').disabled = false; ur();
+}
+
+function ur() {
+  const val = parseFloat(document.getElementById('nval').value) || 0;
+  const fi = parseFloat(document.getElementById('nfi').value) || 0;
+  const pct = fi && val ? ((val / fi) * 100).toFixed(1) : null;
+  const b = document.getElementById('nr');
+  if (val > 0) { b.style.display = 'block'; b.innerHTML = '<strong>Resumo:</strong> ' + fmt(val) + (pct ? ' · ' + pct + '% da FIPE' : '') + ' · Marca como VENDIDO nos objetivos'; }
+  else b.style.display = 'none';
+}
+
+async function regVenda() {
+  const p = document.getElementById('np').value.trim().toUpperCase();
+  const m = document.getElementById('nm').value.trim();
+  const g = document.getElementById('ng').value;
+  const val = parseFloat(document.getElementById('nval').value);
+  const fi = parseFloat(document.getElementById('nfi').value) || null;
+  const cli = document.getElementById('nc').value.trim();
+  const dt2 = document.getElementById('nd').value;
+  const co = parseFloat(document.getElementById('nco').value) || null;
+  const st = document.getElementById('nst').value;
+  if (!m || !val || !cli) { toast('Preencha modelo, valor e cliente', 'w'); return; }
+  const pct = fi && val ? parseFloat(((val / fi) * 100).toFixed(2)) : null;
+  const cls = pct == null ? 'Sem FIPE' : pct < 95 ? 'Abaixo FIPE' : pct <= 100 ? 'Na FIPE' : 'Acima FIPE';
+  try {
+    await api('POST', '/api/vendas', { CLI: cli, MODELO: m, GRUPOS: g, ANO: '—', PLACA: p, FIPE: fi, VALOR: val, PCT: pct, CLASS: cls, COM_R: co, ENT: dt2 || null, MES: dt2 ? dt2.substring(0, 7) : null, ST: st });
+    closeM('nova');
+    ['np', 'nm', 'nval', 'nfi', 'nc', 'nco'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('nr').style.display = 'none';
+    document.getElementById('bsv').disabled = true;
+    document.getElementById('npv').className = 'prev';
+    document.getElementById('npv').textContent = 'Digite a placa...';
+    await loadAll();
+    toast('✓ Venda registrada! ' + p + ' marcado como VENDIDO.');
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+// ── EDITAR VENDA ──────────────────────────────────────────────────────────────
+function editarV(idx) {
+  curIdx = idx; const v = V[idx];
+  document.getElementById('edit-sub').textContent = 'Placa: ' + v.PLACA;
+  document.getElementById('ecli').value = v.CLI || '';
+  document.getElementById('emod').value = v.MODELO || '';
+  document.getElementById('es').value = v.ST || '';
+  document.getElementById('ed').value = v.ENT ? v.ENT.substring(0, 10) : '';
+  document.getElementById('ev').value = v.VALOR || '';
+  document.getElementById('ef').value = v.FIPE || '';
+  document.getElementById('ec').value = v.COM_R || '';
+  document.getElementById('egrp').value = v.GRUPOS || '';
+  openM('edit');
+}
+
+async function saveEdit() {
+  if (curIdx < 0) return;
+  const v = V[curIdx];
+  const cli = document.getElementById('ecli').value.trim() || v.CLI;
+  const mod = document.getElementById('emod').value.trim() || v.MODELO;
+  const grp = document.getElementById('egrp').value || v.GRUPOS;
+  const st = document.getElementById('es').value;
+  const ent = document.getElementById('ed').value || null;
+  const val = parseFloat(document.getElementById('ev').value) || v.VALOR;
+  const fi = parseFloat(document.getElementById('ef').value) || null;
+  const co = parseFloat(document.getElementById('ec').value) || null;
+  const mes = ent ? ent.substring(0, 7) : v.MES;
+  const pct = fi && val ? parseFloat(((val / fi) * 100).toFixed(2)) : v.PCT;
+  const cls = pct == null ? 'Sem FIPE' : pct < 95 ? 'Abaixo FIPE' : pct <= 100 ? 'Na FIPE' : 'Acima FIPE';
+  try {
+    await api('PUT', '/api/vendas/' + v.id, { CLI: cli, MODELO: mod, GRUPOS: grp, VALOR: val, FIPE: fi, PCT: pct, CLASS: cls, COM_R: co, ENT: ent, MES: mes, ST: st });
+    closeM('edit'); curIdx = -1;
+    await loadAll();
+    toast('✓ Registro atualizado!');
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+// ── EDITOR FIPE ───────────────────────────────────────────────────────────────
+function bF() {
+  const p = document.getElementById('fp').value.trim().toUpperCase();
+  document.getElementById('fp').value = p;
+  const el = document.getElementById('ff-found');
+  if (p.length < 4) { el.innerHTML = '—'; return; }
+  const v = V.find(x => x.PLACA === p);
+  if (v) el.innerHTML = `<span class="mono">${v.PLACA}</span> ${v.MODELO} · Venda: ${fmt(v.VALOR)}${v.FIPE ? ` · <strong style="color:var(--blue2)">FIPE: ${fmt(v.FIPE)}</strong>` : ' · <span style="color:var(--g300)">Sem FIPE</span>'}`;
+  else el.innerHTML = '<span style="color:var(--red)">Placa não encontrada nas vendas</span>';
+}
+
+async function saveFipe() {
+  const p = document.getElementById('fp').value.trim().toUpperCase();
+  const novo = parseFloat(document.getElementById('fn').value);
+  if (!p || isNaN(novo) || novo <= 0) { toast('Informe placa e valor FIPE válido', 'w'); return; }
+  const v = V.find(x => x.PLACA === p);
+  if (!v) { toast('Placa não encontrada', 'e'); return; }
+  const pct = parseFloat(((v.VALOR / novo) * 100).toFixed(2));
+  const cls = pct < 95 ? 'Abaixo FIPE' : pct <= 100 ? 'Na FIPE' : 'Acima FIPE';
+  try {
+    await api('PUT', '/api/vendas/' + v.id, { ...v, FIPE: novo, PCT: pct, CLASS: cls });
+    document.getElementById('fp').value = ''; document.getElementById('fn').value = ''; document.getElementById('ff-found').innerHTML = '—';
+    await loadAll(); rFT();
+    toast('✓ FIPE de ' + p + ' atualizada para ' + fmt(novo));
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+function rFT() {
+  const q = (document.getElementById('fs').value || '').toLowerCase();
+  let d = V.filter(v => v.FIPE != null);
+  if (q) d = d.filter(v => v.PLACA.toLowerCase().includes(q) || v.MODELO.toLowerCase().includes(q));
+  d.sort((a, b) => b.FIPE - a.FIPE);
+  document.getElementById('fc').textContent = d.length + ' registros';
+  document.getElementById('ft').innerHTML = d.map((v, i) => `<tr><td style="color:var(--g300)">${i + 1}</td><td><span class="mono">${v.PLACA}</span></td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis">${v.MODELO}</td><td><span class="badge bgray" style="font-size:9.5px">${v.GRUPOS}</span></td><td style="font-weight:600">${fmt(v.VALOR)}</td><td style="font-weight:600;color:var(--blue2)">${fmt(v.FIPE)}</td><td style="font-weight:600;color:${pctC(v.PCT)}">${pp(v.PCT)}</td><td><button class="btn-ic" onclick="document.getElementById('fp').value='${v.PLACA}';bF();document.getElementById('fn').focus()">Editar</button></td></tr>`).join('');
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────────────────────
+function exportCSV() {
+  const hdrs = ['Placa', 'Modelo', 'Segmento', 'Ano', 'Cliente', 'Valor', 'FIPE', '%FIPE', 'Classificação', 'Comissão', 'Entrega', 'Status'];
+  const rows = V.map(v => [v.PLACA, v.MODELO, v.GRUPOS, v.ANO, v.CLI, v.VALOR, v.FIPE || '', v.PCT || '', v.CLASS, v.COM_R || '', v.ENT || '', v.ST].map(c => '"' + String(c || '').replace(/"/g, '""') + '"').join(','));
+  const csv = [hdrs.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'Translute_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click(); toast('✓ CSV exportado!');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function rd() {
+  if (!DASH.faturamento) return;
+  const { faturamento, comissao, negocios, melhorMes, objPendentes, objVendidos, capitalPendente, patrimonioTotal, patrimonioCavallos, patrimonioCarretas, porMes, porGrupo, fipeMedia } = DASH;
+  document.getElementById('atxt').textContent = `${objPendentes} objetivos pendentes · capital potencial: ${fmtM(capitalPendente)} · Patrimônio total (604 veíc.): ${fmtM(patrimonioTotal)} · Cavalos: ${fmtM(patrimonioCavallos)} · Carretas: ${fmtM(patrimonioCarretas)}`;
+  document.getElementById('fin').innerHTML = [
+    { l: 'Faturamento total', v: fmtM(faturamento), s: negocios + ' negócios ativos', c: 'var(--navy)' },
+    { l: 'Melhor mês', v: fmt(melhorMes?.total || 0), s: (melhorMes?.MES || '—').replace('-', '/'), c: 'var(--green)' },
+    { l: 'Ticket médio', v: fmt(negocios ? faturamento / negocios : 0), s: 'por negócio', c: 'var(--pur)' },
+    { l: 'Comissão total', v: fmt(comissao), s: 'acumulada', c: 'var(--gold)' },
+  ].map(c => `<div class="kpi"><div class="kpi-s" style="background:${c.c}"></div><div class="kpi-l">${c.l}</div><div class="kpi-v">${c.v}</div><div class="kpi-sub">${c.s}</div></div>`).join('');
+
+  const ab2 = V.filter(v => v.PCT && v.PCT > 20 && v.PCT < 95 && v.ST !== 'CANCELADO').length;
+  const na = V.filter(v => v.PCT && v.PCT >= 95 && v.PCT <= 100 && v.ST !== 'CANCELADO').length;
+  const sf = V.filter(v => (!v.PCT || v.PCT <= 20) && v.ST !== 'CANCELADO').length;
+  const tot = (ab2 + na) || 1;
+  document.getElementById('fipe-card').innerHTML = `<div class="ct">Análise FIPE — cavalos</div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px"><span style="font-size:27px;font-weight:600;color:var(--navy);letter-spacing:-1px">${(fipeMedia || 0).toFixed(1)}%</span><span style="font-size:11.5px;color:var(--g300)">médio vs tabela</span></div>
+    <div style="display:flex;height:6px;border-radius:4px;overflow:hidden;gap:2px;margin:8px 0 12px"><div style="width:${Math.round(ab2/tot*100)}%;background:var(--red);border-radius:4px"></div><div style="width:${Math.round(na/tot*100)}%;background:var(--green);border-radius:4px"></div><div style="flex:1;background:var(--g100);border-radius:4px"></div></div>
+    <div class="dr"><span style="color:var(--g500);font-size:12.5px">Abaixo FIPE (&lt;95%)</span><span class="badge br">${ab2} · ${Math.round(ab2/tot*100)}%</span></div>
+    <div class="dr"><span style="color:var(--g500);font-size:12.5px">Na FIPE (95–100%)</span><span class="badge bg">${na}</span></div>
+    <div class="dr"><span style="color:var(--g500);font-size:12.5px">Sem FIPE (carreta/truck)</span><span class="badge bgray">${sf}</span></div>`;
+
+  document.getElementById('omini').innerHTML = [
+    { l: 'Objetivos', v: O.length, c: 'var(--navy)' }, { l: 'Vendidos', v: objVendidos, c: 'var(--green)' }, { l: 'Pendentes', v: objPendentes, c: 'var(--yel)' },
+  ].map(c => `<div class="kpi"><div class="kpi-s" style="background:${c.c}"></div><div class="kpi-l">${c.l}</div><div class="kpi-v" style="font-size:22px;color:${c.c}">${c.v}</div></div>`).join('');
+
+  const seg = {}; V.filter(v => v.ST !== 'CANCELADO').forEach(v => { seg[v.GRUPOS] = (seg[v.GRUPOS] || 0) + 1; });
+  kc('cSeg'); CH.cSeg = new Chart(document.getElementById('cSeg'), { type: 'doughnut', data: { labels: Object.keys(seg), datasets: [{ data: Object.values(seg), backgroundColor: ['#0d1b2e', '#162336', '#1e4fd8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#c9933a'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '64%', plugins: { legend: { position: 'right', labels: { color: '#64748b', font: { size: 9.5, family: 'DM Sans' }, boxWidth: 7, padding: 4 } } } } });
+  const gO = (porGrupo || []).slice(0, 7);
+  kc('cGrp'); CH.cGrp = new Chart(document.getElementById('cGrp'), { type: 'bar', data: { labels: gO.map(g => g.GRUPOS.replace('CARRETA ', 'CAR. ').replace('CAVALO ', 'CAV. ')), datasets: [{ data: gO.map(g => g.total), backgroundColor: ['#0d1b2e', '#162336', '#1e4fd8', '#2563eb', '#3b82f6', '#60a5fa', '#c9933a'], borderRadius: 5, borderSkipped: false }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', callback: v => v >= 1e6 ? 'R$' + (v / 1e6).toFixed(1) + 'M' : 'R$' + (v / 1e3).toFixed(0) + 'k', font: { size: 10 } }, grid: { color: '#f1f5f9' }, border: { display: false } }, y: { ticks: { color: '#475569', font: { size: 10.5 } }, grid: { display: false }, border: { display: false } } } } });
+  const ms = (porMes || []);
+  kc('cMes'); CH.cMes = new Chart(document.getElementById('cMes'), { type: 'line', data: { labels: ms.map(m => { const [y, mo] = (m.MES || '').split('-'); return new Date(+y, +mo - 1).toLocaleString('pt-BR', { month: 'short', year: '2-digit' }); }), datasets: [{ data: ms.map(m => m.total), borderColor: '#1e4fd8', backgroundColor: 'rgba(26,86,219,.05)', fill: true, tension: .42, pointRadius: 3.5, pointBackgroundColor: '#fff', pointBorderColor: '#1e4fd8', pointBorderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 }, maxRotation: 45 }, grid: { color: '#f1f5f9' }, border: { display: false } }, y: { ticks: { color: '#94a3b8', callback: v => 'R$' + (v / 1e3).toFixed(0) + 'k', font: { size: 10 } }, grid: { color: '#f1f5f9' }, border: { display: false } } } } });
+}
+
+// ── VENDAS TABLE ───────────────────────────────────────────────────────────────
+function initVF() {
+  const gs = [...new Set(V.map(v => v.GRUPOS))].sort();
+  const sg = document.getElementById('vg'); sg.innerHTML = '<option value="">Todos segmentos</option>';
+  gs.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; sg.appendChild(o); });
+}
+function rv() {
+  const q = (document.getElementById('vs').value || '').toLowerCase();
+  const grp = document.getElementById('vg').value, flt = document.getElementById('vf').value;
+  const st = document.getElementById('vst').value;
+  let d = [...V];
+  if (q) d = d.filter(v => v.PLACA.toLowerCase().includes(q) || (v.CLI || '').toLowerCase().includes(q) || (v.MODELO || '').toLowerCase().includes(q));
+  if (grp) d = d.filter(v => v.GRUPOS === grp);
+  if (flt) d = d.filter(v => v.CLASS === flt);
+  if (st) d = d.filter(v => v.ST === st);
+  const total = d.reduce((s, v) => s + (v.ST === 'CANCELADO' ? 0 : (v.VALOR || 0)), 0);
+  document.getElementById('vc').textContent = d.length + ' de ' + V.length + ' · ' + fmt(total);
+  document.getElementById('vb').innerHTML = d.map((v, i) => {
+    const c = pctC(v.PCT);
+    const fc = v.CLASS === 'Abaixo FIPE' ? 'br' : v.CLASS === 'Na FIPE' ? 'bg' : 'bgray';
+    const cancel = v.ST === 'CANCELADO';
+    const rs = cancel ? 'background:#fff5f5;opacity:.75;' : '';
+    return `<tr style="${rs}"><td style="color:var(--g300)">${i + 1}</td><td><span class="mono">${v.PLACA}</span></td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis">${v.MODELO}</td><td><span class="badge bgray" style="font-size:9.5px">${v.GRUPOS}</span></td><td style="color:var(--g500)">${v.ANO}</td><td style="max-width:145px;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;color:var(--g500)">${v.CLI}</td><td style="font-weight:600;${cancel ? 'text-decoration:line-through;color:var(--g300)' : ''}">${fmt(v.VALOR)}</td><td style="color:var(--g500)">${v.FIPE ? fmt(v.FIPE) : '—'}</td><td style="font-weight:600;color:${c}">${pp(v.PCT)}</td><td><span class="badge ${fc}">${v.CLASS}</span></td><td>${v.COM_R != null ? fmt(v.COM_R) : '—'}</td><td style="color:var(--g500)">${dtf(v.ENT)}</td><td>${stTag(v.ST)}</td><td><button class="btn-ic" onclick="editarV(${i})">&#9998; Editar</button></td></tr>`;
+  }).join('');
+}
+
+// ── ATIVOS ────────────────────────────────────────────────────────────────────
+function setTipo(t, el) { _atTipo = t; document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('on')); el.classList.add('on'); rAtCharts(); rAt(); }
+function filteredA() { return _atTipo === 'TODOS' ? A : A.filter(a => a.TIPO === _atTipo); }
+function initAtF() {
+  const ms = [...new Set(A.map(a => a.MARCA))].sort();
+  const sm = document.getElementById('at-m'); sm.innerHTML = '<option value="">Todas marcas</option>';
+  ms.forEach(m => { const o = document.createElement('option'); o.value = m; o.textContent = m; sm.appendChild(o); });
+}
+function rAtCharts() {
+  const d = filteredA(); const totalAll = A.reduce((s, a) => s + a.FIPE, 0);
+  const mc = {}; d.forEach(a => { const k = _atTipo === 'TODOS' ? (a.TIPO + ' ' + a.MARCA) : a.MARCA; mc[k] = (mc[k] || 0) + a.FIPE; });
+  const mO = Object.entries(mc).sort((a, b) => b[1] - a[1]).slice(0, 7);
+  document.getElementById('at-chart-title').textContent = _atTipo === 'TODOS' ? 'FIPE por tipo e marca' : 'FIPE por marca';
+  kc('cAtM'); CH.cAtM = new Chart(document.getElementById('cAtM'), { type: 'bar', data: { labels: mO.map(m => m[0]), datasets: [{ data: mO.map(m => m[1]), backgroundColor: ['#0d1b2e', '#162336', '#1e4fd8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'], borderRadius: 5, borderSkipped: false }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94a3b8', font: { size: 9.5 }, maxRotation: 30 }, grid: { color: '#f1f5f9' }, border: { display: false } }, y: { ticks: { color: '#94a3b8', callback: v => 'R$' + (v / 1e6).toFixed(0) + 'M', font: { size: 10 } }, grid: { color: '#f1f5f9' }, border: { display: false } } } } });
+  const fx = { 'ate2005': 0, '2006-2015': 0, '2016-2019': 0, '2020-2021': 0, '2022+': 0 };
+  d.forEach(a => { if (a.ANO <= 2005) fx['ate2005'] += a.FIPE; else if (a.ANO <= 2015) fx['2006-2015'] += a.FIPE; else if (a.ANO <= 2019) fx['2016-2019'] += a.FIPE; else if (a.ANO <= 2021) fx['2020-2021'] += a.FIPE; else fx['2022+'] += a.FIPE; });
+  kc('cAtA'); CH.cAtA = new Chart(document.getElementById('cAtA'), { type: 'doughnut', data: { labels: ['Até 2005', '2006-2015', '2016-2019', '2020-2021', '2022+'], datasets: [{ data: Object.values(fx), backgroundColor: ['#ef4444', '#f97316', '#f59e0b', '#1e4fd8', '#0d1b2e'], borderWidth: 2, borderColor: '#fff' }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '55%', plugins: { legend: { position: 'right', labels: { color: '#475569', font: { size: 10 }, boxWidth: 9, padding: 5, generateLabels: c => c.data.labels.map((l, i) => ({ text: l + ' ' + fmtM(c.data.datasets[0].data[i]), fillStyle: c.data.datasets[0].backgroundColor[i], strokeStyle: '#fff', index: i })) } } } } });
+}
+function rAt() {
+  const totalAll = A.reduce((s, a) => s + a.FIPE, 0);
+  const cav = A.filter(a => a.TIPO === 'CAVALO'), carr = A.filter(a => a.TIPO === 'CARRETA');
+  document.getElementById('at-kpis').innerHTML = [
+    { l: 'Patrimônio total', v: fmtM(totalAll), s: A.length + ' veíc. cavalos + carretas', c: 'var(--navy)' },
+    { l: 'Cavalos (' + cav.length + ')', v: fmtM(cav.reduce((s, a) => s + a.FIPE, 0)), s: 'cavalos mecânicos', c: 'var(--blue2)' },
+    { l: 'Carretas (' + carr.length + ')', v: fmtM(carr.reduce((s, a) => s + a.FIPE, 0)), s: 'implementos', c: 'var(--pur)' },
+    { l: 'Capital a desinvestir', v: fmtM(A.filter(a => a.VENDA).reduce((s, a) => s + a.FIPE, 0)), s: A.filter(a => a.VENDA).length + ' veíc. para venda', c: 'var(--red)' },
+  ].map(c => `<div class="kpi"><div class="kpi-s" style="background:${c.c}"></div><div class="kpi-l">${c.l}</div><div class="kpi-v">${c.v}</div><div class="kpi-sub">${c.s}</div></div>`).join('');
+  const d = filteredA();
+  const vd = d.filter(a => a.VENDA).sort((a, b) => b.FIPE - a.FIPE).slice(0, 10); const maxV = vd[0] ? vd[0].FIPE : 1;
+  document.getElementById('at-rv').innerHTML = vd.map((a, i) => `<div class="dr"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:7px"><span style="font-size:10px;color:var(--g300);width:14px">${i + 1}</span><span class="mono">${a.PLACA}</span><span style="font-size:11px;color:var(--g500)">${a.MARCA} · ${a.ANO} · ${a.TIPO}</span></div><div class="bh" style="margin-left:21px"><div class="bhf" style="width:${Math.round(a.FIPE / maxV * 100)}%;background:var(--red)"></div></div></div><div style="font-size:12px;font-weight:600;margin-left:10px">${fmt(a.FIPE)}</div></div>`).join('');
+  const mc = {}, mn = {}; d.forEach(a => { mc[a.MARCA] = (mc[a.MARCA] || 0) + a.FIPE; mn[a.MARCA] = (mn[a.MARCA] || 0) + 1; });
+  const mO = Object.entries(mc).sort((a, b) => b[1] - a[1]); const maxM = mO[0] ? mO[0][1] : 1;
+  document.getElementById('at-rm').innerHTML = mO.map(m => `<div class="dr"><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">${m[0]}</span><span style="font-size:11px;color:var(--g300)">${mn[m[0]]} veíc. · ${(m[1] / totalAll * 100).toFixed(1)}%</span></div><div class="bh"><div class="bhf" style="width:${Math.round(m[1] / maxM * 100)}%;background:var(--blue2)"></div></div></div><div style="font-size:12px;font-weight:600;margin-left:10px">${fmtM(m[1])}</div></div>`).join('');
+  const flt = document.getElementById('at-f').value;
+  const marc = document.getElementById('at-m').value;
+  const tp = document.getElementById('at-tp').value;
+  const q = (document.getElementById('at-s').value || '').toLowerCase();
+  let tbl = [...A].sort((a, b) => b.FIPE - a.FIPE);
+  if (tp) tbl = tbl.filter(a => a.TIPO === tp);
+  if (flt === 'venda') tbl = tbl.filter(a => a.VENDA); if (flt === 'manter') tbl = tbl.filter(a => !a.VENDA);
+  if (marc) tbl = tbl.filter(a => a.MARCA === marc);
+  if (q) tbl = tbl.filter(a => a.PLACA.toLowerCase().includes(q));
+  document.getElementById('at-c').textContent = tbl.length + ' · ' + fmtM(tbl.reduce((s, a) => s + a.FIPE, 0));
+  document.getElementById('at-b').innerHTML = tbl.map((a, i) => {
+    const pct = (a.FIPE / totalAll * 100).toFixed(2);
+    const tc = a.TIPO === 'CAVALO' ? 'bb' : 'bp';
+    return `<tr><td style="color:var(--g300)">${i + 1}</td><td><span class="mono">${a.PLACA}</span></td><td><span class="badge ${tc}" style="font-size:9.5px">${a.TIPO}</span></td><td style="font-weight:600">${a.MARCA}</td><td><span class="badge bgray">${a.CONFIG}</span></td><td><span class="badge ${a.ANO <= 2021 ? 'br' : 'bg'}">${a.ANO}</span></td><td style="font-size:11px;color:var(--g500);max-width:120px;overflow:hidden;text-overflow:ellipsis">${a.SPEC || '—'}</td><td style="font-weight:600">${fmt(a.FIPE)}</td><td><span class="badge ${a.VENDA ? 'br' : 'bg'}">${a.VENDA ? 'Vender' : 'Manter'}</span></td></tr>`;
+  }).join('');
+}
+
+// ── OBJETIVOS ─────────────────────────────────────────────────────────────────
+function initOF() {
+  const ts = [...new Set(O.map(o => o.TRACAO))].sort();
+  const st = document.getElementById('ot'); st.innerHTML = '<option value="">Toda tração</option>';
+  ts.forEach(t => { const o = document.createElement('option'); o.value = t; o.textContent = t; st.appendChild(o); });
+}
+function ro() {
+  const nV2 = O.filter(o => o.STATUS === 'VENDIDO').length, nP2 = O.filter(o => o.STATUS !== 'VENDIDO').length, nH2 = O.filter(o => o.STATUS === 'HIBRIDO').length;
+  const capV = O.filter(o => o.STATUS === 'VENDIDO').reduce((s, o) => s + o.VALOR_APROX, 0);
+  const capP = O.filter(o => o.STATUS !== 'VENDIDO').reduce((s, o) => s + o.VALOR_APROX, 0);
+  document.getElementById('okpi').innerHTML = [
+    { l: 'Total', v: O.length, s: 'frota monitorada', c: 'var(--navy)' }, { l: 'Vendidos', v: nV2, s: fmtM(capV), c: 'var(--green)' }, { l: 'Pendentes', v: nP2, s: 'capital: ' + fmtM(capP), c: 'var(--yel)' }, { l: 'Híbridos', v: nH2, s: 'em transição', c: 'var(--pur)' },
+  ].map(c => `<div class="kpi"><div class="kpi-s" style="background:${c.c}"></div><div class="kpi-l">${c.l}</div><div class="kpi-v">${c.v}</div><div class="kpi-sub">${c.s}</div></div>`).join('');
+  const q = (document.getElementById('oq').value || '').toLowerCase();
+  const trac = document.getElementById('ot').value, st = document.getElementById('os').value;
+  let d = [...O];
+  if (q) d = d.filter(o => o.PLACA.toLowerCase().includes(q)); if (trac) d = d.filter(o => o.TRACAO === trac);
+  if (st === 'VENDIDO') d = d.filter(o => o.STATUS === 'VENDIDO'); else if (st === 'HIBRIDO') d = d.filter(o => o.STATUS === 'HIBRIDO'); else if (st === 'pend') d = d.filter(o => !o.STATUS);
+  document.getElementById('oc').textContent = d.length + ' de ' + O.length;
+  document.getElementById('ob').innerHTML = d.map((o, i) => {
+    const sc = o.STATUS === 'VENDIDO' ? 'bg' : o.STATUS === 'HIBRIDO' ? 'bp' : 'by', sl = o.STATUS === 'VENDIDO' ? 'Vendido' : o.STATUS === 'HIBRIDO' ? 'Híbrido' : 'Pendente';
+    return `<tr><td style="color:var(--g300)">${i + 1}</td><td><span class="mono">${o.PLACA}</span></td><td style="font-weight:500">${o.MODELO}</td><td><span class="badge bgray">${o.TRACAO}</span></td><td style="color:var(--g500)">${o.ANO}</td><td style="font-weight:600">${fmt(o.VALOR_APROX)}</td><td><span class="badge ${sc}">${sl}</span></td><td><select class="ssel" onchange="updateObjStatus('${o.PLACA}',this.value)"><option value="" ${!o.STATUS ? 'selected' : ''}>Pendente</option><option value="VENDIDO" ${o.STATUS === 'VENDIDO' ? 'selected' : ''}>Vendido</option><option value="HIBRIDO" ${o.STATUS === 'HIBRIDO' ? 'selected' : ''}>Híbrido</option></select></td></tr>`;
+  }).join('');
+}
+
+async function updateObjStatus(placa, status) {
+  try {
+    await api('PUT', '/api/objetivos/' + placa + '/status', { STATUS: status });
+    await loadAll();
+    toast('✓ Status de ' + placa + ' atualizado');
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+// ── ALERTAS ───────────────────────────────────────────────────────────────────
+function ra() {
+  const Vat = V.filter(v => v.ST !== 'CANCELADO');
+  const af = Vat.filter(v => v.PCT && v.PCT > 20 && v.PCT < 85);
+  const ab = Vat.filter(v => !v.ENT && v.ST && v.ST.trim() !== '');
+  const op = O.filter(o => o.STATUS !== 'VENDIDO'), capP = op.reduce((s, o) => s + o.VALOR_APROX, 0);
+  document.getElementById('ac').innerHTML = [
+    { c: 'var(--yel)', t: 'Objetivos pendentes', n: op.length, s: fmtM(capP) + ' potencial', rows: op.slice(0, 8).map(o => `<div class="dr"><span class="mono">${o.PLACA}</span><div style="text-align:right"><div style="font-size:11px;color:var(--g500)">${o.MODELO} ${o.ANO}</div><div style="font-size:11.5px;color:var(--yel);font-weight:600">${fmt(o.VALOR_APROX)}</div></div></div>`).join('') },
+    { c: 'var(--red)', t: 'Abaixo de 85% FIPE', n: af.length, s: 'revisar precificação', rows: af.sort((a, b) => a.PCT - b.PCT).slice(0, 8).map(v => `<div class="dr"><span class="mono">${v.PLACA}</span><div style="text-align:right"><div style="color:var(--red);font-weight:600">${pp(v.PCT)}</div><div style="font-size:11px;color:var(--g500)">${fmt(v.VALOR)}</div></div></div>`).join('') || '<div style="padding:10px;color:var(--green);font-size:12.5px">Nenhuma ✓</div>' },
+    { c: 'var(--blue2)', t: 'Em aberto / sem entrega', n: ab.length, s: 'aguardando conclusão', rows: ab.slice(0, 8).map(v => `<div class="dr"><span class="mono">${v.PLACA}</span><div style="text-align:right">${stTag(v.ST)}<div style="font-size:11.5px;font-weight:600;margin-top:2px">${fmt(v.VALOR)}</div></div></div>`).join('') || '<div style="padding:10px;color:var(--green);font-size:12.5px">Tudo concluído ✓</div>' },
+  ].map(c => `<div class="card" style="margin-bottom:0"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:28px;height:28px;border-radius:var(--rsm);background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${c.c}">!</div><div><div style="font-size:13px;font-weight:600">${c.t}</div><div style="font-size:11px;color:var(--g300)">${c.s}</div></div></div><div style="font-size:28px;font-weight:700;color:${c.c};letter-spacing:-1px;margin-bottom:10px">${c.n}</div>${c.rows}</div>`).join('');
+  document.getElementById('af').innerHTML = af.sort((a, b) => a.PCT - b.PCT).map(v => `<div class="dr"><div><div style="font-size:12px;font-weight:500">${v.PLACA} — ${v.MODELO}</div><div style="font-size:11px;color:var(--g500);margin-top:1px">${v.CLI.substring(0, 45)}</div></div><div style="text-align:right"><div style="font-weight:600;color:var(--red)">${pp(v.PCT)}</div><div style="font-size:11px;color:var(--g500)">${fmt(v.VALOR)}</div></div></div>`).join('') || '<div style="padding:14px;color:var(--g300);font-size:12.5px;text-align:center">Nenhuma ✓</div>';
+  document.getElementById('aa').innerHTML = ab.map(v => `<div class="dr"><div><div style="font-size:12px;font-weight:500">${v.PLACA} — ${v.MODELO}</div><div style="font-size:11px;color:var(--g500);margin-top:1px">${v.CLI.substring(0, 45)}</div></div><div style="text-align:right">${stTag(v.ST)}<div style="font-size:11.5px;font-weight:600;margin-top:3px">${fmt(v.VALOR)}</div></div></div>`).join('') || '<div style="padding:14px;color:var(--g300);font-size:12.5px;text-align:center">Todas concluídas ✓</div>';
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
+async function loadUsers() {
+  try {
+    const users = await api('GET', '/api/usuarios');
+    document.getElementById('users-b').innerHTML = users.map((u, i) => `<tr><td style="color:var(--g300)">${i + 1}</td><td><span class="mono">${u.usuario}</span></td><td>${u.nome}</td><td><span class="badge ${u.perfil === 'admin' ? 'br' : 'bg'}">${u.perfil}</span></td><td style="color:var(--g500);font-size:11px">${new Date(u.criado_em).toLocaleDateString('pt-BR')}</td><td><button class="btn-ic" onclick="resetSenha(${u.id})">Resetar senha</button></td></tr>`).join('');
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+async function createUser() {
+  const usuario = document.getElementById('u-user').value.trim();
+  const senha = document.getElementById('u-pass').value;
+  const nome = document.getElementById('u-nome').value.trim();
+  const perfil = document.getElementById('u-perfil').value;
+  if (!usuario || !senha || !nome) { toast('Preencha todos os campos', 'w'); return; }
+  try {
+    await api('POST', '/api/usuarios', { usuario, senha, nome, perfil });
+    closeM('user');
+    ['u-user', 'u-pass', 'u-nome'].forEach(id => document.getElementById(id).value = '');
+    await loadUsers();
+    toast('✓ Usuário ' + usuario + ' criado!');
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+async function resetSenha(id) {
+  const nova = prompt('Nova senha para o usuário (mínimo 6 caracteres):');
+  if (!nova || nova.length < 6) return;
+  try {
+    await api('PUT', '/api/usuarios/' + id + '/senha', { senha: nova });
+    toast('✓ Senha atualizada!');
+  } catch (e) { toast('Erro: ' + e.message, 'e'); }
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+if (TOKEN && USER) { initApp(); } else { document.getElementById('login-page').style.display = 'flex'; }
+</script>
+</body>
+</html>
