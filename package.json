@@ -4,7 +4,7 @@
   "description": "Sistema de gestao de vendas e frota - Translute Seminovos",
   "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js",
+   "start": "node database/seed.js && node backend/server.js",
     "dev": "nodemon backend/server.js",
     "seed": "node database/seed.js"
   },
